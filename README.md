@@ -61,16 +61,16 @@ When you click on it, it selects the entire line. In other words, it selects tha
 
 The buttons are:
 
-**Proxima Página (Next Page)**
+**Proxima Página (Next Page)**  
 The table will contain a maximun number of rows. If the results contains more lines than the limit, the button will lead to the next page of the table.
 
-**Consultar Endereço (Consult Address)**
+**Consultar Endereço (Consult Address)**  
 With the selected customer (First column selected), when you click this button, will open a popup (explained in the next image) containing the data of the customer address
 
-**Consultar Telefones (Consult Phones)**
+**Consultar Telefones (Consult Phones)**  
 Follows the same logic of "Consultar Endereço"
 
-**Editar Dados (Edit Data)**
+**Editar Dados (Edit Data)**  
 With the selected customer, when click this button, the sistem will "get" this customer data and will lead it to the customer registry screen, but all form fields will be filled automatically
 with the selected customer data. The user make the changes he wants and will save the customer, thus updating it.
 
