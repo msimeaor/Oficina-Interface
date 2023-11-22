@@ -1,5 +1,5 @@
 import React from 'react'
-import Input from '../Input/Input'
+import Input from '../Form/Input/Input'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const CustomerRegistryScreen = () => {
