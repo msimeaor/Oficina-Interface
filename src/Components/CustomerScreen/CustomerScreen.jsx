@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import NavLink from '../NavLink/NavLink'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const CustomerScreen = ({ setCurrentPage }) => {
 
@@ -11,9 +11,14 @@ const CustomerScreen = ({ setCurrentPage }) => {
 
   return (
     <section className='container' >
-      <NavLink/>
+      <NavLink registryHref="cadastrar" searchHref="buscar" />
       <Routes>
-        <Route/> {/*Aqui virão as duas rotas das telas de clientes*/}
+        {
+          /*
+          <Route path="/cadastrar" element={<CustomerRegistryScreen/>} />
+          <Route path="/buscar" element={<SearchCustomerScreen/>} />
+          */
+        }
       </Routes>
     </section>
   )
