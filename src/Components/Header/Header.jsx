@@ -16,7 +16,7 @@ const Header = ({ currentPage }) => {
         </div>
         <div className='row pt-2' >
           <div className='col' >
-            <h4><a href="#">Inicio</a></h4>
+            <h4><Link to="/" >Inicio</Link></h4>
           </div>
         </div>
       </section>
