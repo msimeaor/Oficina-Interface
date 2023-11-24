@@ -86,6 +86,16 @@ const CustomerRegistryScreen = () => {
             <Button description='Buscar Endereço' />
           </div>
         </div>
+        <div className='row pt-5' >
+          <div className='col-6 d-flex justify-content-end' >
+            {/*Create the clearForm function*/}
+            <Button description='Limpar Formulário' />
+          </div>
+          <div className='col-6' >
+            {/*Create the saveCustomer function*/}
+            <Button description='Salvar Cliente' />
+          </div>
+        </div>
       </form>
     </section>
   )
