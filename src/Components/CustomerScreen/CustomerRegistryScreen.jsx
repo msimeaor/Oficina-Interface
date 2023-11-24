@@ -9,6 +9,7 @@ const CustomerRegistryScreen = () => {
   const [email, setEmail] = React.useState('')
   const [birthday, setBirthday] = React.useState('')
   const [gender, setGender] = React.useState('')
+  const [address, setAddress] = React.useState('')
 
   const genderOptions = ['Masculino', 'Feminino']
 
@@ -67,6 +68,20 @@ const CustomerRegistryScreen = () => {
               value={gender}
               setValue={setGender}
             />
+          </div>
+          <div className='col-6' >
+            <Input
+              type='Text'
+              label='Endereço'
+              id='address'
+              value={address}
+              handleChange={({target}) => setAddress(target.value)}
+            />
+          </div>
+        </div>
+        <div className='row justify-content-end' >
+          <div className='col-4 d-flex justify-content-end' >
+            <button>Buscar Endereço</button>
           </div>
         </div>
       </form>
