@@ -1,6 +1,7 @@
 import React from 'react'
 import Input from '../Form/Input/Input'
 import Select from '../Form/Select/Select'
+import Button from '../Form/Button/Button'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const CustomerRegistryScreen = () => {
@@ -81,7 +82,8 @@ const CustomerRegistryScreen = () => {
         </div>
         <div className='row justify-content-end' >
           <div className='col-4 d-flex justify-content-end' >
-            <button>Buscar Endereço</button>
+            {/*Create the findAddress function*/}
+            <Button description='Buscar Endereço' />
           </div>
         </div>
       </form>
