@@ -1,21 +1,24 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const Select = ({ id, options, value, setValue, }) => {
+const Select = ({ id, label, options, value, setValue, }) => {
 
   function handleChange({target}) {
     setValue(target.value)
   }
 
   return (
-    <select className='custom-select' id={id} value={value} onChange={handleChange} >
-      <option value="" disabled >Selecione</option>
-      {
-        options.map((option) => (
-          <option key={option} value={option}>{option}</option>
-        ))
-      }
-    </select>
+      <div>
+        <label htmlFor={id}>{label}</label>
+        <select className='custom-select' id={id} value={value} onChange={handleChange} >
+          <option value="" defaultValue={true} >Selecione</option>
+          {
+            options.map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))
+          }
+        </select>
+      </div>
   )
 }
 

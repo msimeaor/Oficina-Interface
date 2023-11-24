@@ -1,5 +1,6 @@
 import React from 'react'
 import Input from '../Form/Input/Input'
+import Select from '../Form/Select/Select'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const CustomerRegistryScreen = () => {
@@ -7,6 +8,9 @@ const CustomerRegistryScreen = () => {
   const [cpf, setCpf] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [birthday, setBirthday] = React.useState('')
+  const [gender, setGender] = React.useState('')
+
+  const genderOptions = ['Masculino', 'Feminino']
 
   return (
     <section className='mt-5 mb-5' >
@@ -51,6 +55,17 @@ const CustomerRegistryScreen = () => {
               id='birthday'
               value={birthday}
               handleChange={({target}) => setBirthday(target.value)}
+            />
+          </div>
+        </div>
+        <div className='row' >
+          <div className='col-6' >
+            <Select
+              id='sexo'
+              label='Sexo'
+              options={genderOptions}
+              value={gender}
+              setValue={setGender}
             />
           </div>
         </div>
