@@ -2,11 +2,11 @@ import React from 'react'
 
 const values = {
   cpf: {
-    regex: /^(\d{3})[.]?(\d{3})[.]?(\d{3})[-.]?(\d{2})$/g,
+    regex: /^(\d{3})[.]?(\d{3})[.]?(\d{3})[-.]?(\d{2})$/,
     message: 'CPF inválido!'
   },
   email: {
-    regex: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/gi,
+    regex: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
     message: 'Email inválido!'
   }
 }
@@ -17,52 +17,47 @@ const useForm = (type) => {
   const [value, setValue] = React.useState('')
   const [error, setError] = React.useState(null)
 
-  function validateInput(value) {
-    if (isMandatoryFill()) {
-      return existsValidationForThisInput() ? checkInputValue(value) : checkIfItsFilled(value)
-
-    } else if (isInputNotEmpty(value)) {
-      return existsValidationForThisInput() ? checkInputValue(value) : returnCaseInputItsValid()
-    }
-
-    returnCaseInputItsValid()
-  }
-
-  function isMandatoryFill() {
-    return mandatoryFillInputs.includes(type)
-  }
-
-  function existsValidationForThisInput() {
-    return typeof values[type] === 'undefined' ? false : true 
-  }
-
-  function checkInputValue(value) {
-    if (values[type].regex.test(value)) {
-      returnCaseInputItsValid()
-
+  function validateInput(inputValue) {
+    if (isFilled(inputValue)) {
+      existsValidation() ? validateInputValue(inputValue) : approveValidation()
     } else {
-      setError(values[type].message)
-      return false
+      isMandatory() ? failValidation() : approveValidation()
     }
   }
 
-  function returnCaseInputItsValid() {
+  function isFilled(inputValue) {
+    return inputValue.length >= 1
+  }
+
+  function existsValidation() {
+    return typeof values[type] !== 'undefined'
+  }
+
+  function validateInputValue(inputValue) {
+    if (values[type].regex.test(inputValue) === true) {
+      return approveValidation()
+    }
+    
+    return failValidation()
+  }
+
+  function approveValidation() {
     setError(null)
     return true
   }
 
-  function checkIfItsFilled(value) {
-    if (value.length >= 1) {
-      returnCaseInputItsValid()
-      
-    } else {
-      setError('Preenchimento Obrigatório')
-      return false
-    }
+  function isMandatory() {
+    return mandatoryFillInputs.includes(type)
   }
 
-  function isInputNotEmpty(value) {
-    return value.length !== 0
+  function failValidation() {
+    if (existsValidation()) {
+      setError(values[type].message)
+      return false
+    }
+
+    setError('Preenchimento obrigatório!')
+    return false
   }
 
   function handleChange({target}) {
