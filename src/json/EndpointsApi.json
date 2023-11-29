@@ -1,0 +1,26 @@
+{
+  "defaultAddress": "http://localhost:8080/api",
+  "endpoints": {
+    "person": {
+      "findAllPeople": "/pessoas",
+      "findPersonByName": "/pessoas/findByNome/:name",
+      "findPersonById": "/pessoas/:id",
+      "updatePerson": "/pessoas/:id",
+      "savePerson": "/pessoas/:placa"
+    },
+    "address": {
+      "findAllAddress": "/enderecos",
+      "saveAddress": "/enderecos",
+      "findAddressByLogradouro": "/enderecos/findByLogradouro/:logradouro",
+      "findAddressById": "/enderecos/:id",
+      "updateAddress": "/enderecos/:id"
+    },
+    "phones": {
+      "findAllPhones": "/telefones",
+      "savePhone": "/telefones",
+      "findPhoneByNumero": "/telefones/findByNumero/:numero",
+      "findPhoneById": "/telefones/:id",
+      "updatePhone": "/telefones/:id"
+    }
+  }
+}
