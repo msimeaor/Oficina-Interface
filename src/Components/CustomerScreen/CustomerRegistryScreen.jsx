@@ -78,6 +78,26 @@ const CustomerRegistryScreen = () => {
     requestData.enderecoId = addressId
   }
 
+  function clearForm() {
+    clearRequestDataObject()
+    clearInputValues()
+  }
+
+  function clearRequestDataObject() {
+    for (let attr in requestData) {
+      attr = null
+    }
+  }
+
+  function clearInputValues() {
+    name.setValue('')
+    cpf.setValue('')
+    email.setValue('')
+    birthday.setValue('')
+    address.setValue('')
+    setGender('')
+  }
+
   return (
     <section className='mt-5 mb-5' >
       <form onSubmit={(event) => event.preventDefault()} >
@@ -122,8 +142,8 @@ const CustomerRegistryScreen = () => {
         </div>
         <div className='row mt-5' >
           <div className='col-6 d-flex justify-content-end' >
-            {/*Create a function for button to clear the form*/}
             <Button
+              handleClick={clearForm}
               description='Limpar Formulário'
             />
           </div>
