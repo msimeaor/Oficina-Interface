@@ -47,14 +47,7 @@ const CustomerRegistryScreen = () => {
       id: 'birthday',
       placeholder: '',
       data: birthday
-    },
-    {
-      type: 'Text',
-      label: 'Endereço',
-      id: 'address',
-      placeholder: 'Insira o logradouro do cliente',
-      data: address
-    },
+    }
   ]
 
   let requestData = {
@@ -99,20 +92,24 @@ const CustomerRegistryScreen = () => {
                   placeholder={inputValues.placeholder}
                   {...inputValues.data}
                 />
-                {
-                  inputValues.id === 'address'
-                  ? (
-                    <Button
-                      handleClick={searchForAddress}
-                      description='Buscar Endereço'
-                    />
-                  ) : (
-                    null
-                  )
-                }
               </div>
             ))
           }
+          <div className='col-6' >
+            <Input
+              id='address'
+              label='Endereço'
+              type='Text'
+              placeholder='Insira o logradouro do cliente'
+              {...address}
+              // This error overwrites the error whitin {...address}. This error comes from useFetch and, when it becomes true, an error message will be rendered below the input.
+              error={error}
+            />
+            <Button
+              handleClick={searchForAddress}
+              description='Buscar Endereço'
+            />
+          </div>
           <div className='col-6' >
             <Select
               id='gender'
