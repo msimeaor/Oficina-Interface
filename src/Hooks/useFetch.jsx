@@ -17,15 +17,15 @@ const useFetch = () => {
       json = await response.json()
 
       if (!response.ok) {
-        throw new Error('Erro')
+        throw new Error(json.mensagemErro)
       }
 
-    } catch (Error) {
-      setError(Error.message)
+    } catch (err) {
+      json = null
+      setError(err.message)
 
     } finally {
       setData(json)
-      setError(null)
       setLoading(false)
       return [response, json]
 

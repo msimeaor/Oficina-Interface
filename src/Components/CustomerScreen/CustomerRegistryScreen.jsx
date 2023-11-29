@@ -3,6 +3,8 @@ import Input from '../Form/Input/Input'
 import Select from '../Form/Select/Select'
 import Button from '../Form/Button/Button'
 import useForm from '../../Hooks/useForm'
+import useFetch from '../../Hooks/useFetch'
+import endpointsApi from '../../json/EndpointsApi.json'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const CustomerRegistryScreen = () => {
@@ -12,6 +14,8 @@ const CustomerRegistryScreen = () => {
   const address = useForm('address')
   const birthday = useForm('birthday')
   const [gender, setGender] = React.useState('')
+
+  const { data, loading, error, doFetch } = useFetch()
 
   const genderOptions = ['Masculino', 'Feminino']
 
@@ -53,9 +57,37 @@ const CustomerRegistryScreen = () => {
     },
   ]
 
+  let requestData = {
+    nome: null,
+    email: null,
+    cpf: null,
+    sexo: null,
+    dataNascimento: null,
+    enderecoId: null
+  }
+
+  async function searchForAddress() {
+    if (address.value.length == 0) return false
+
+    const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.address.findAddressByLogradouro}`.replace(':logradouro', address.value)
+    const [response, json] = await doFetch(url)
+    
+    // The function returns false and the error that was imported from useFetch will become true, rendering the error message below the address input
+    if(!json) return false
+
+    fillAddressInput(json)
+  }
+
+  function fillAddressInput(json) {
+    const AddressLogradouro = json._embedded.enderecoResponseDTOList[0].logradouro
+    const addressId = json._embedded.enderecoResponseDTOList[0].id
+    address.setValue(AddressLogradouro)
+    requestData.enderecoId = addressId
+  }
+
   return (
     <section className='mt-5 mb-5' >
-      <form>
+      <form onSubmit={(event) => event.preventDefault()} >
         <div className='row' >
           {
             inputsValues.map((inputValues) => (
@@ -68,10 +100,10 @@ const CustomerRegistryScreen = () => {
                   {...inputValues.data}
                 />
                 {
-                  /*Create a function for button to find an address*/
                   inputValues.id === 'address'
                   ? (
                     <Button
+                      handleClick={searchForAddress}
                       description='Buscar Endereço'
                     />
                   ) : (
