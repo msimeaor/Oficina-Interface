@@ -13,6 +13,7 @@ const CustomerRegistryScreen = () => {
   const email = useForm('email')
   const address = useForm('address')
   const birthday = useForm('birthday')
+  const carPlate = useForm('carPlate')
   const [gender, setGender] = React.useState('')
 
   const { data, loading, error, doFetch } = useFetch()
@@ -47,6 +48,13 @@ const CustomerRegistryScreen = () => {
       id: 'birthday',
       placeholder: '',
       data: birthday
+    },
+    {
+      type: 'Text',
+      label: 'Placa do Carro',
+      id: 'plate',
+      placeholder: 'Insira a placa do carro do cliente',
+      data: carPlate
     }
   ]
 
@@ -96,6 +104,15 @@ const CustomerRegistryScreen = () => {
             ))
           }
           <div className='col-6' >
+            <Select
+              id='gender'
+              label='Gênero'
+              options={genderOptions}
+              value={gender}
+              setValue={setGender}
+            />
+          </div>
+          <div className='col-12' >
             <Input
               id='address'
               label='Endereço'
@@ -108,15 +125,6 @@ const CustomerRegistryScreen = () => {
             <Button
               handleClick={searchForAddress}
               description='Buscar Endereço'
-            />
-          </div>
-          <div className='col-6' >
-            <Select
-              id='gender'
-              label='Gênero'
-              options={genderOptions}
-              value={gender}
-              setValue={setGender}
             />
           </div>
         </div>
