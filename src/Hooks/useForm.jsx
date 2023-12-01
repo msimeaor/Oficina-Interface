@@ -8,10 +8,14 @@ const values = {
   email: {
     regex: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
     message: 'Email inválido!'
+  },
+  carPlate: {
+    regex: /\w{7}/i,
+    message: 'Placa inválida!'
   }
 }
 
-const mandatoryFillInputs = ['name']
+const mandatoryFillInputs = ['name, carPlate']
 
 const useForm = (type) => {
   const [value, setValue] = React.useState('')
