@@ -59,15 +59,6 @@ const CustomerRegistryScreen = () => {
     }
   ]
 
-  let requestData = {
-    nome: null,
-    email: null,
-    cpf: null,
-    sexo: null,
-    dataNascimento: null,
-    enderecoId: null
-  }
-
   async function searchForAddress() {
     if (address.value.length == 0) return false
 
@@ -88,14 +79,7 @@ const CustomerRegistryScreen = () => {
   }
 
   function clearForm() {
-    clearRequestDataObject()
     clearInputValues()
-  }
-
-  function clearRequestDataObject() {
-    for (let attr in requestData) {
-      attr = null
-    }
   }
 
   function clearInputValues() {
@@ -104,15 +88,15 @@ const CustomerRegistryScreen = () => {
     email.setValue('')
     birthday.setValue('')
     address.setValue('')
+    carPlate.setValue('')
     setGender('')
   }
 
   function saveCustomer() {
-    if (isInputsValid()) {
+    if (isInputsValid())
       fetchAPI()
-    } else {
+    else
       alert('Dados inválidos!')
-    }
   }
 
   function isInputsValid() {
