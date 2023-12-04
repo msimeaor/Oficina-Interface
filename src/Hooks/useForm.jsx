@@ -23,9 +23,9 @@ const useForm = (type) => {
 
   function validateInput(inputValue) {
     if (isFilled(inputValue)) {
-      existsValidation() ? validateInputValue(inputValue) : approveValidation()
+      return existsValidation() ? validateInputValue(inputValue) : approveValidation()
     } else {
-      isMandatory() ? failValidation() : approveValidation()
+      return isMandatory() ? failValidation() : approveValidation()
     }
   }
 
@@ -73,8 +73,8 @@ const useForm = (type) => {
     value, 
     setValue, 
     error, 
-    validateInput,
-    onBlur: ({target}) => validateInput(target.value),
+    validateInput: () => validateInput(value),
+    onBlur: () => validateInput(value),
     handleChange
   }
 

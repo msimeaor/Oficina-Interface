@@ -19,6 +19,7 @@ const CustomerRegistryScreen = () => {
   const { data, loading, error, doFetch } = useFetch()
 
   const genderOptions = ['Masculino', 'Feminino']
+  const [addressId, setAddressId] = React.useState(null)
 
   const inputsValues = [
     {
@@ -81,9 +82,9 @@ const CustomerRegistryScreen = () => {
 
   function fillAddressInput(json) {
     const AddressLogradouro = json._embedded.enderecoResponseDTOList[0].logradouro
-    const addressId = json._embedded.enderecoResponseDTOList[0].id
+    const recoveredAddressId = json._embedded.enderecoResponseDTOList[0].id
     address.setValue(AddressLogradouro)
-    requestData.enderecoId = addressId
+    setAddressId(recoveredAddressId)
   }
 
   function clearForm() {
@@ -104,6 +105,54 @@ const CustomerRegistryScreen = () => {
     birthday.setValue('')
     address.setValue('')
     setGender('')
+  }
+
+  function saveCustomer() {
+    if (isInputsValid()) {
+      fetchAPI()
+    } else {
+      alert('Dados inválidos!')
+    }
+  }
+
+  function isInputsValid() {
+    return (
+      name.validateInput() &&
+      cpf.validateInput() &&
+      email.validateInput() &&
+      birthday.validateInput() &&
+      address.validateInput() &&
+      carPlate.validateInput() &&
+      (gender === 'Masculino' || gender === 'Feminino')
+    )
+  }
+
+  async function fetchAPI() {
+    const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.person.savePerson}`.replace(':placa', carPlate.value)
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nome: name.value,
+        cpf: cpf.value,
+        email: email.value,
+        dataNascimento: birthday.value,
+        sexo: gender,
+        enderecoId: addressId
+      })
+    }
+
+    const [response, json] = await doFetch(url, options)
+    requestFeedback(response)
+  }
+
+  function requestFeedback(response) {
+    if (response.ok)
+      alert('Cliente cadastrado com sucesso!')
+    else
+      alert('Erro ao cadastrar o cliente! Verifique os dados e tente novamente.')
   }
 
   return (
@@ -156,8 +205,8 @@ const CustomerRegistryScreen = () => {
             />
           </div>
           <div className='col-6' >
-            {/*Create a function for button to save the customer*/}
             <Button
+              handleClick={saveCustomer}
               description='Salvar Cliente'
             />
           </div>
