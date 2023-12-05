@@ -4,6 +4,7 @@ import HomeScreen from "./Components/HomeScreen/HomeScreen"
 import CustomerScreen from "./Components/CustomerScreen/CustomerScreen"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './globalStyles.css'
 
 const App = () => {
   const [currentPage, setCurrentPage] = React.useState('Bem Vindo')

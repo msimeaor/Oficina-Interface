@@ -1,0 +1,35 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  position: relative;
+}
+
+html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-title: 'Times New Roman';
+  --font-size: 1.2rem;
+  --radius: .2rem;
+}
+
+ul {
+  list-style: square;
+}
+
+input,
+textarea {
+  transition: .2s;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
