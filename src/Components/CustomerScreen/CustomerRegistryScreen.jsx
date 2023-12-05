@@ -176,6 +176,7 @@ const CustomerRegistryScreen = () => {
               error={error}
             />
             <Button
+              className='btn btn-outline-secondary'
               handleClick={searchForAddress}
               description='Buscar Endereço'
             />
@@ -184,12 +185,14 @@ const CustomerRegistryScreen = () => {
         <div className='row mt-5' >
           <div className='col-6 d-flex justify-content-end' >
             <Button
+              className='btn btn-dark'
               handleClick={clearForm}
               description='Limpar Formulário'
             />
           </div>
           <div className='col-6' >
             <Button
+              className='btn btn-dark'
               handleClick={saveCustomer}
               description='Salvar Cliente'
             />

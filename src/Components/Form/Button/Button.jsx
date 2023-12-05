@@ -1,9 +1,9 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const Button = ({ handleClick, description }) => {
+const Button = ({ handleClick, description, className }) => {
   return (
-    <button className='btn btn-outline-primary' onClick={handleClick} >
+    <button className={className} onClick={handleClick} >
       {description}
     </button>
   )
