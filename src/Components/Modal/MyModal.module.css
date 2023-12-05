@@ -1,0 +1,26 @@
+.modalContainer {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  background-color: rgba(0, 0, 0, .5);
+  width: 100% !important;
+  height: 100vh !important;
+  padding-top: 4rem;
+}
+
+.modal {
+  min-width: 400px;
+  animation: showModal forwards .5s;
+}
+
+@keyframes showModal {
+  from {
+    top: -100%;
+  }
+  to {
+    top: 0;
+  }
+}

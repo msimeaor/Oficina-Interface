@@ -2,6 +2,7 @@ import React from 'react'
 import Input from '../Form/Input/Input'
 import Select from '../Form/Select/Select'
 import Button from '../Form/Button/Button'
+import MyModal from '../Modal/MyModal'
 import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
@@ -15,12 +16,13 @@ const CustomerRegistryScreen = () => {
   const birthday = useForm('birthday')
   const carPlate = useForm('carPlate')
   const [gender, setGender] = React.useState('')
+  const [addressId, setAddressId] = React.useState(null)
+  const [modalMessage, setModalMessage] = React.useState(null)
+  const [modalTitle, setModalTitle] = React.useState(null)
 
   const { data, loading, error, doFetch } = useFetch()
 
   const genderOptions = ['Masculino', 'Feminino']
-  const [addressId, setAddressId] = React.useState(null)
-
   const inputsValues = [
     {
       type: 'Text',
@@ -95,8 +97,10 @@ const CustomerRegistryScreen = () => {
   function saveCustomer() {
     if (isInputsValid())
       fetchAPI()
-    else
-      alert('Dados inválidos!')
+    else {
+      setModalTitle('Ops...')
+      setModalMessage('Dados inválidos!')
+    }
   }
 
   function isInputsValid() {
@@ -133,10 +137,13 @@ const CustomerRegistryScreen = () => {
   }
 
   function requestFeedback(response) {
-    if (response.ok)
-      alert('Cliente cadastrado com sucesso!')
-    else
-      alert('Erro ao cadastrar o cliente! Verifique os dados e tente novamente.')
+    if (response.ok) {
+      setModalTitle('Sucesso!')
+      setModalMessage('Cliente cadastrado com sucesso!')
+    } else {
+      setModalTitle('Ops...')
+      setModalMessage('Erro ao cadastrar o cliente!')
+    }
   }
 
   return (
@@ -199,6 +206,7 @@ const CustomerRegistryScreen = () => {
           </div>
         </div>
       </form>
+      <MyModal message={modalMessage} setModalMessage={setModalMessage} title={modalTitle} setModalTitle={setModalTitle} />
     </section>
   )
 }
