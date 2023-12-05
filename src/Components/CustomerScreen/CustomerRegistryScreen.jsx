@@ -123,10 +123,10 @@ const CustomerRegistryScreen = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        nome: name.value,
-        cpf: cpf.value,
-        email: email.value,
-        dataNascimento: birthday.value,
+        nome: assignValue(name),
+        cpf: assignValue(cpf),
+        email: assignValue(email),
+        dataNascimento: assignValue(birthday),
         sexo: gender,
         enderecoId: addressId
       })
@@ -134,6 +134,10 @@ const CustomerRegistryScreen = () => {
 
     const [response, json] = await doFetch(url, options)
     requestFeedback(response)
+  }
+
+  function assignValue(input) {
+    return input.value.length >= 1 ? input.value : null
   }
 
   function requestFeedback(response) {
