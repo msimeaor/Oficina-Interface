@@ -18,7 +18,7 @@ const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholde
       />
       { 
         error && 
-        <small className='form-text text-muted' >
+        <small className='form-text text-danger' >
           {error}
         </small>
       }

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Route, Routes } from 'react-router'
-import NavLink from '../NavLink/NavLink'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import CustomNavLink from '../NavLink/CustomNavLink'
 import CustomerRegistryScreen from './CustomerRegistryScreen'
+import { Route, Routes } from 'react-router'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const CustomerScreen = ({ setCurrentPage }) => {
 
@@ -11,8 +11,8 @@ const CustomerScreen = ({ setCurrentPage }) => {
   }, [setCurrentPage])
 
   return (
-    <section className='container' >
-      <NavLink registryHref="cadastrar" searchHref="buscar" />
+    <section className='container mt-3' >
+      <CustomNavLink registryHref="cadastrar" searchHref="buscar" />
       <Routes>
         <Route path="/cadastrar" element={<CustomerRegistryScreen/>} />
         {
