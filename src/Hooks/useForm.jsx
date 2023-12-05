@@ -15,7 +15,7 @@ const values = {
   }
 }
 
-const mandatoryFillInputs = ['name, carPlate']
+const mandatoryFillInputs = ['name', 'carPlate']
 
 const useForm = (type) => {
   const [value, setValue] = React.useState('')
