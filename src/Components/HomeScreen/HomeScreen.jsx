@@ -1,6 +1,5 @@
 import React from 'react'
 import LinkToServiceScreen from './LinkToServiceScreen'
-import { Link } from 'react-router-dom'
 import { ReactComponent as Person } from '../../Images/person-solid.svg'
 import { ReactComponent as House } from '../../Images/house-solid.svg'
 import { ReactComponent as Phone } from '../../Images/phone-solid.svg'
@@ -13,8 +12,8 @@ const HomeScreen = ({ setCurrentPage }) => {
   }, [setCurrentPage])
 
   return (
-    <section className='container' >
-      <div className='row mt-5' >
+    <section className='container mt-5' >
+      <div className='row' >
         <LinkToServiceScreen href='clientes' LinkIcon={<Person/>} linkDescription='Clientes' />
         <LinkToServiceScreen href='#' LinkIcon={<House/>} linkDescription='Endereços' />
         <LinkToServiceScreen href='#' LinkIcon={<Phone/>} linkDescription='Telefones' />

@@ -1,0 +1,19 @@
+.containerBordered {
+  transition: .1s;
+  outline: .2rem solid #6c757d;
+  border-radius: 1rem;
+}
+
+.linkDescription {
+  text-decoration: none !important;
+}
+
+.hoveredIcon path {
+  transition: .1s;
+  fill: #6c757d
+}
+
+.hoveredDescription {
+  transition: .1s;
+  color: #6c757d !important;
+}
