@@ -1,14 +1,14 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholder }) => {
+const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholder, inputClass }) => {
   return (
     <>
       <label htmlFor={id}>
           {label}
       </label>
       <input 
-        className='form-control' 
+        className={`form-control ${inputClass}`}
         type={type} 
         id={id} 
         value={value} 
