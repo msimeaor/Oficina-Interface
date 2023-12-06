@@ -58,8 +58,9 @@ const SearchCustomerScreen = () => {
 
   return (
     <section className='mt-5 mb-5' >
-      <div className='row d-flex align-items-end' >
-        <div className='col-9' >
+      <div className='row justify-content-center' >
+        <div className='col-lg-2' ></div>
+        <div className='col-lg-5 col-9' >
           <div className='form-inline' >
             <Input
               id='name'
@@ -73,13 +74,14 @@ const SearchCustomerScreen = () => {
             />
           </div>
         </div>
-        <div className='col-3' >
+        <div className='col-lg-3 col-3' >
           <Button
             className='btn btn-outline-dark'
             handleClick={searchForCustomers}
             description='Buscar Cliente'
           />
         </div>
+        <div className='col-lg-2' ></div>
       </div>
       <MyModal {...modalData} setModalData={setModalData} />
     </section>
