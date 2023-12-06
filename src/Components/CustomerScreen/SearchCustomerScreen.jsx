@@ -43,6 +43,17 @@ const SearchCustomerScreen = () => {
     }
 
     const [response, json] = await doFetch(url, options)
+
+    if (!response.ok)
+      requestFeedback(json)
+  }
+
+  function requestFeedback(json) {
+    setModalData({
+      ...modalData,
+      title: 'Ops...',
+      message: json.mensagemErro
+    })
   }
 
   return (
@@ -70,10 +81,7 @@ const SearchCustomerScreen = () => {
           />
         </div>
       </div>
-      <MyModal
-        {...modalData}
-        setModalData={setModalData}
-      />
+      <MyModal {...modalData} setModalData={setModalData} />
     </section>
   )
 }

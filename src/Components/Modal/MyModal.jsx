@@ -8,7 +8,7 @@ import styles from './MyModal.module.css'
 const MyModal = ({ title, message, setModalData }) => {
 
   function closeModal() {
-    setModalData(null)
+    setModalData({title: null, message: null})
   }
 
   if (message)
