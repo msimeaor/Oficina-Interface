@@ -5,11 +5,10 @@ import { ModalBody, ModalFooter, ModalHeader, ModalTitle } from 'react-bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styles from './MyModal.module.css'
 
-const MyModal = ({ title, message, setModalMessage, setModalTitle }) => {
+const MyModal = ({ title, message, setModalData }) => {
 
   function closeModal() {
-    setModalMessage(null)
-    setModalTitle(null)
+    setModalData(null)
   }
 
   if (message)

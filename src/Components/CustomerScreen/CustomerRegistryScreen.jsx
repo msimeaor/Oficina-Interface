@@ -17,8 +17,10 @@ const CustomerRegistryScreen = () => {
   const carPlate = useForm('carPlate')
   const [gender, setGender] = React.useState('')
   const [addressId, setAddressId] = React.useState(null)
-  const [modalMessage, setModalMessage] = React.useState(null)
-  const [modalTitle, setModalTitle] = React.useState(null)
+  const [modalData, setModalData] = React.useState({
+    title: null,
+    message: null
+  })
 
   const { data, loading, error, doFetch } = useFetch()
 
@@ -101,8 +103,11 @@ const CustomerRegistryScreen = () => {
       clearInputValues()
     }
     else {
-      setModalTitle('Ops...')
-      setModalMessage('Dados inválidos!')
+      setModalData({
+        ...modalData,
+        title: 'Ops...',
+        message: 'Dados inválidos!'
+      })
     }
   }
 
@@ -145,11 +150,17 @@ const CustomerRegistryScreen = () => {
 
   function requestFeedback(response) {
     if (response.ok) {
-      setModalTitle('Sucesso!')
-      setModalMessage('Cliente cadastrado com sucesso!')
+      setModalData({
+        ...modalData,
+        title: 'Sucesso!',
+        message: 'Cliente cadastrado com sucesso!'
+      })
     } else {
-      setModalTitle('Ops...')
-      setModalMessage('Erro ao cadastrar o cliente!')
+      setModalData({
+        ...modalData,
+        title: 'Ops...',
+        message: 'Erro ao cadastrar o cliente!'
+      })
     }
   }
 
@@ -217,7 +228,7 @@ const CustomerRegistryScreen = () => {
           </div>
         </div>
       </form>
-      <MyModal message={modalMessage} setModalMessage={setModalMessage} title={modalTitle} setModalTitle={setModalTitle} />
+      <MyModal {...modalData} setModalData={setModalData} />
     </section>
   )
 }
