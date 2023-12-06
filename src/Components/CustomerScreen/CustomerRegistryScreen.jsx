@@ -89,14 +89,17 @@ const CustomerRegistryScreen = () => {
     cpf.setValue('')
     email.setValue('')
     birthday.setValue('')
-    address.setValue('')
+    address.setValue('')    
+    setAddressId(null)
     carPlate.setValue('')
     setGender('')
   }
 
   function saveCustomer() {
-    if (isInputsValid())
+    if (isInputsValid()) {
       fetchAPI()
+      clearInputValues()
+    }
     else {
       setModalTitle('Ops...')
       setModalMessage('Dados inválidos!')
@@ -123,7 +126,7 @@ const CustomerRegistryScreen = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        nome: assignValue(name),
+        nome: name.value,
         cpf: assignValue(cpf),
         email: assignValue(email),
         dataNascimento: assignValue(birthday),
