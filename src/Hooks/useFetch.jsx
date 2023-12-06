@@ -21,7 +21,6 @@ const useFetch = () => {
       }
 
     } catch (err) {
-      json = null
       setError(err.message)
 
     } finally {
