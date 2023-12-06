@@ -58,7 +58,7 @@ const SearchCustomerScreen = () => {
 
   return (
     <section className='mt-5 mb-5' >
-      <div className='row justify-content-center' >
+      <div className='row' >
         <div className='col-lg-2' ></div>
         <div className='col-lg-5 col-9' >
           <div className='form-inline' >
