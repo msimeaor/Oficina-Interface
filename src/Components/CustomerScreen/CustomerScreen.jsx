@@ -3,6 +3,7 @@ import CustomNavLink from '../NavLink/CustomNavLink'
 import CustomerRegistryScreen from './CustomerRegistryScreen'
 import { Route, Routes } from 'react-router'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import SearchCustomerScreen from './SearchCustomerScreen'
 
 const CustomerScreen = ({ setCurrentPage }) => {
 
@@ -15,11 +16,7 @@ const CustomerScreen = ({ setCurrentPage }) => {
       <CustomNavLink registryHref="cadastrar" searchHref="buscar" />
       <Routes>
         <Route path="/cadastrar" element={<CustomerRegistryScreen/>} />
-        {
-          /*
-          <Route path="/buscar" element={<SearchCustomerScreen/>} />
-          */
-        }
+        <Route path="/buscar" element={<SearchCustomerScreen/>} />
       </Routes>
     </section>
   )
