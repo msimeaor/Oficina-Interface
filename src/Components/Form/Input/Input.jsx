@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholder }) => {
   return (
-    <div className='form-group' >
+    <>
       <label htmlFor={id}>
           {label}
       </label>
@@ -22,7 +22,7 @@ const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholde
           {error}
         </small>
       }
-    </div>
+    </>
   )
 }
 

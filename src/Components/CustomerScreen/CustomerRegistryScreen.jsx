@@ -160,13 +160,15 @@ const CustomerRegistryScreen = () => {
           {
             inputsValues.map((inputValues) => (
               <div key={inputValues.id} className='col-6' >
-                <Input
-                  id={inputValues.id}
-                  label={inputValues.label}
-                  type={inputValues.type}
-                  placeholder={inputValues.placeholder}
-                  {...inputValues.data}
-                />
+                <div className='form-group' >
+                  <Input
+                    id={inputValues.id}
+                    label={inputValues.label}
+                    type={inputValues.type}
+                    placeholder={inputValues.placeholder}
+                    {...inputValues.data}
+                  />
+                </div>
               </div>
             ))
           }
@@ -180,15 +182,17 @@ const CustomerRegistryScreen = () => {
             />
           </div>
           <div className='col-12' >
-            <Input
-              id='address'
-              label='Endereço'
-              type='Text'
-              placeholder='Insira o logradouro do cliente'
-              {...address}
-              // This error overwrites the error whitin {...address}. This error comes from useFetch and, when it becomes true, an error message will be rendered below the input.
-              error={error}
-            />
+            <div className='form-group' >
+              <Input
+                id='address'
+                label='Endereço'
+                type='Text'
+                placeholder='Insira o logradouro do cliente'
+                {...address}
+                // This error overwrites the error whitin {...address}. This error comes from useFetch and, when it becomes true, an error message will be rendered below the input.
+                error={error}
+              />
+            </div>
             <Button
               className='btn btn-outline-secondary'
               handleClick={searchForAddress}
