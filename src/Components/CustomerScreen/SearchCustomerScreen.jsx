@@ -2,6 +2,7 @@ import React from 'react'
 import Input from '../Form/Input/Input'
 import Button from '../Form/Button/Button'
 import MyModal from '../Modal/MyModal'
+import MyTable from '../Table/MyTable'
 import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
@@ -16,6 +17,8 @@ const SearchCustomerScreen = () => {
     title: null,
     message: null
   })
+  const tableTitles = ['#', 'Nome', 'Sexo', 'Data de Nascimento', 'Email']
+  const tableAttributesDisplayed = ['#', 'nome', 'sexo', 'dataNascimento', 'email']
 
   function searchForCustomers() {
     if (isInputValid())
@@ -83,6 +86,11 @@ const SearchCustomerScreen = () => {
         </div>
         <div className='col-lg-2' ></div>
       </div>
+      { data &&
+        <div className='row mt-5' >
+          <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.pessoaResponseDTOList} />
+        </div>
+      }
       <MyModal {...modalData} setModalData={setModalData} />
     </section>
   )

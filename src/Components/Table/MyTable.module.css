@@ -1,0 +1,12 @@
+.tableContainer {
+  overflow-x: scroll;
+}
+
+.bodyTh {
+  min-width: 5rem;
+}
+
+.bodyTd {
+  white-space: nowrap;
+  min-width: 10rem;
+}
