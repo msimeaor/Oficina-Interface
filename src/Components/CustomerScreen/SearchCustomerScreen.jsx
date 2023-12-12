@@ -19,10 +19,33 @@ const SearchCustomerScreen = () => {
   })
   const tableTitles = ['#', 'Nome', 'Sexo', 'Data de Nascimento', 'Email']
   const tableAttributesDisplayed = ['#', 'nome', 'sexo', 'dataNascimento', 'email']
+  const tableNavigationButtons = [
+    {
+      classname: 'btn btn-dark',
+      handleClick: switchToPreviousTablePage,
+      description: 'Página Anterior'
+    },
+    {
+      classname: 'btn btn-dark',
+      handleClick: checkAddress,
+      description: 'Consultar Endereço'
+    },
+    {
+      classname: 'btn btn-dark',
+      handleClick: checkPhones,
+      description: 'Consultar Telefones'
+    },
+    {
+      classname: 'btn btn-dark',
+      handleClick: switchToNextTablePage,
+      description: 'Próxima Página'
+    }
+  ]
 
   function searchForCustomers() {
-    if (isInputValid())
+    if (isInputValid()) {
       fetchAPI()
+    }
     else {
       setModalData({
         ...modalData,
@@ -59,6 +82,43 @@ const SearchCustomerScreen = () => {
     })
   }
 
+  function switchToPreviousTablePage() {
+    
+  }
+
+  async function switchPage(url) {
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const [response, json] = await doFetch(url, options)
+  }
+
+  function checkAddress() {
+
+  }
+
+  function checkPhones() {
+
+  }
+
+  function switchToNextTablePage() {
+    const currentPage = data.page.number
+    const totalPages = data.page.totalPages
+
+    if (currentPage < totalPages - 1) {
+      const nextPageURL = data._links.next.href
+      switchPage(nextPageURL)
+    } else
+      setModalData({
+        title: 'Ops...',
+        message: 'Você já está na ultima página!'
+      })
+  }
+
   return (
     <section className='mt-5 mb-5' >
       <div className='row' >
@@ -86,10 +146,21 @@ const SearchCustomerScreen = () => {
         </div>
         <div className='col-lg-2' ></div>
       </div>
-      { data &&
-        <div className='row mt-5' >
-          <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.pessoaResponseDTOList} />
-        </div>
+      { data && !error &&
+        <>
+          <div className='row mt-5' >
+            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.pessoaResponseDTOList} />
+          </div>
+          <div className='row mt-5' >
+            {
+              tableNavigationButtons.map((buttonInfo, index) => (
+                <div key={index} className={`col-3 d-flex ${index < 2 ? 'justify-content-end' : 'justify-content-start'}`} >
+                  <Button className={buttonInfo.classname} handleClick={buttonInfo.handleClick} description={buttonInfo.description} />
+                </div>
+              ))
+            }
+          </div>
+        </>
       }
       <MyModal {...modalData} setModalData={setModalData} />
     </section>
