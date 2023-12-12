@@ -83,7 +83,16 @@ const SearchCustomerScreen = () => {
   }
 
   function switchToPreviousTablePage() {
+    const currentPage = data.page.number
     
+    if (currentPage > 0) {
+      const previousPageURL = data._links.prev.href
+      switchPage(previousPageURL)
+    } else
+      setModalData({
+        title: 'Ops...',
+        message: 'Você já está na primeira página!'
+      })
   }
 
   async function switchPage(url) {
