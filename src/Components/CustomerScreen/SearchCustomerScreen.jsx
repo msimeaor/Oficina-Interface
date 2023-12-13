@@ -12,6 +12,7 @@ import styles from './SearchCustomerScreen.module.css'
 const SearchCustomerScreen = () => {
   const name = useForm('name')
   
+  const [tableRowSelectedObject, setTableRowSelectedObject] = React.useState(null)
   const { data, loading, error, doFetch } = useFetch()
   const [modalData, setModalData] = React.useState({
     title: null,
@@ -44,15 +45,11 @@ const SearchCustomerScreen = () => {
 
   function searchForCustomers() {
     if (isInputValid()) {
+      setTableRowSelectedObject(null)
       fetchAPI()
     }
-    else {
-      setModalData({
-        ...modalData,
-        title: 'Ops...',
-        message: 'Insira o nome do cliente para buscá-lo'
-      })
-    }
+    else
+      showModal('Campo vazio!', 'Insira o nome do cliente para buscá-lo')
   }
 
   function isInputValid() {
@@ -71,15 +68,11 @@ const SearchCustomerScreen = () => {
     const [response, json] = await doFetch(url, options)
 
     if (!response.ok)
-      requestFeedback(json)
+      showModal('Ops...', json.mensagemErro)
   }
 
-  function requestFeedback(json) {
-    setModalData({
-      ...modalData,
-      title: 'Ops...',
-      message: json.mensagemErro
-    })
+  function showModal(title, message) {
+    setModalData({title, message})
   }
 
   function switchToPreviousTablePage() {
@@ -89,13 +82,12 @@ const SearchCustomerScreen = () => {
       const previousPageURL = data._links.prev.href
       switchPage(previousPageURL)
     } else
-      setModalData({
-        title: 'Ops...',
-        message: 'Você já está na primeira página!'
-      })
+      showModal('Página não encontrada!', 'Você já está na primeira página!')
   }
 
   async function switchPage(url) {
+    setTableRowSelectedObject(null)
+
     const options = {
       method: 'GET',
       headers: {
@@ -107,7 +99,27 @@ const SearchCustomerScreen = () => {
   }
 
   function checkAddress() {
+    if (checkIfSomeCustomerIsSelected())
+      showCustomerAddress()
+    else {
+      const modalTitle = 'Cliente não selecionado!'
+      const modalMessage = 'Selecione um cliente para ver seus dados!'
+      showModal(modalTitle, modalMessage)
+    }
+  }
 
+  function checkIfSomeCustomerIsSelected() {
+    return tableRowSelectedObject !== null
+  }
+
+  function showCustomerAddress() {
+    if (tableRowSelectedObject.enderecoResponse !== undefined) {
+      const logradouro = tableRowSelectedObject.enderecoResponse.logradouro
+      const uf = tableRowSelectedObject.enderecoResponse.uf
+      showModal('Endereço', `${logradouro} - ${uf}`)
+    } else {
+      showModal('Endereço não encontrado!', 'Este cliente não possui nenhum endereço cadastrado!')
+    }
   }
 
   function checkPhones() {
@@ -122,10 +134,7 @@ const SearchCustomerScreen = () => {
       const nextPageURL = data._links.next.href
       switchPage(nextPageURL)
     } else
-      setModalData({
-        title: 'Ops...',
-        message: 'Você já está na ultima página!'
-      })
+      showModal('Página não encontrada!', 'Você já está na ultima página')
   }
 
   return (
@@ -158,7 +167,7 @@ const SearchCustomerScreen = () => {
       { data && !error &&
         <>
           <div className='row mt-5' >
-            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.pessoaResponseDTOList} />
+            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.pessoaResponseDTOList} setTableRowSelectedObject={setTableRowSelectedObject} />
           </div>
           <div className='row mt-5' >
             {
