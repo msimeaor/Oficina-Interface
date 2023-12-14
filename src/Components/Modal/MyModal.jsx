@@ -23,7 +23,7 @@ const MyModal = ({ title, message, setModalData }) => {
               </button>
             </div>
             <div className="modal-body">
-              <p>{message}</p>
+              <div>{message}</div>
             </div>
             <div className="modal-footer">
               <Button className='btn btn-dark' handleClick={closeModal} description='OK' />
