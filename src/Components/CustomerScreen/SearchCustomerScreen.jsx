@@ -3,6 +3,7 @@ import Input from '../Form/Input/Input'
 import Button from '../Form/Button/Button'
 import MyModal from '../Modal/MyModal'
 import MyTable from '../Table/MyTable'
+import TableOfModal from '../Table/TableOfModal'
 import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
@@ -123,7 +124,20 @@ const SearchCustomerScreen = () => {
   }
 
   function checkPhones() {
+    if (checkIfSomeCustomerIsSelected())
+      showCustomerPhones()
+    else {
+      const modalTitle = 'Cliente não selecionado!'
+      const modalMessage = 'Selecione um cliente para ver seus dados!'
+      showModal(modalTitle, modalMessage)
+    }
+  }
 
+  function showCustomerPhones() {
+    if (tableRowSelectedObject.telefonesResponse.length > 0)
+        showModal('Telefones', <TableOfModal dataList={tableRowSelectedObject.telefonesResponse} />)  
+      else
+        showModal('Telefones não encontrados!', 'Este cliente não possui nenhum telefone cadastrado!')
   }
 
   function switchToNextTablePage() {
