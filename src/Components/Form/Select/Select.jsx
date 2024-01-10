@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const Select = ({ id, label, options, value, setValue, }) => {
+const Select = ({ id, label, options, value, setValue, hidden }) => {
 
   function handleChange({target}) {
     setValue(target.value)
@@ -10,7 +10,7 @@ const Select = ({ id, label, options, value, setValue, }) => {
   return (
       <div>
         <label htmlFor={id}>{label}</label>
-        <select className='custom-select' id={id} value={value} onChange={handleChange} >
+        <select className='custom-select' id={id} value={value} onChange={handleChange} hidden={hidden} >
           <option value="" defaultValue={true} >Selecione</option>
           {
             options.map((option) => (
