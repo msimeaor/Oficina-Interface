@@ -50,6 +50,7 @@ const UpdateCustomerScreen = ({ tableRowSelectedObject, setUpdateCustomerScreen 
   function clearInputValues() {
     email.setValue('')
     address.setValue('')
+    setAddressId(null)
   }
 
   function updateCustomer() {
