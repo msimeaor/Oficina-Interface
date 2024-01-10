@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from '../Form/Button/Button'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styles from './MyTable.module.css'
 
@@ -13,6 +14,13 @@ const MyTable = ({ tableTitles, tableAttributesDisplayed, tableDataList, setTabl
 
     setTableRowSelectedObject(customerClicked[0])
     setSelectedRow(tableRowId)
+  }
+
+  function fillCell(value) {
+    if (Array.isArray(value))
+      return `${value[2]}/${value[1]}/${value[0]}`
+    else
+      return value
   }
 
   return (
@@ -39,7 +47,7 @@ const MyTable = ({ tableTitles, tableAttributesDisplayed, tableDataList, setTabl
                     tableAttributesDisplayed.map((attr) => (
                       attr === '#' ?
                       <th key={attr} className={`${styles.bodyTh}`} scope='row' >{index + 1}</th> :
-                      <td key={attr} className={`${styles.bodyTd}`} >{person[attr]}</td>
+                      <td key={attr} className={`${styles.bodyTd}`} >{fillCell(person[attr])}</td>
                     ))
                   }
               </tr>
