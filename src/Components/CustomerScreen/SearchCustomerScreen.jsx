@@ -4,6 +4,7 @@ import Button from '../Form/Button/Button'
 import MyModal from '../Modal/MyModal'
 import MyTable from '../Table/MyTable'
 import TableOfModal from '../Table/TableOfModal'
+import UpdateCustomerScreen from './UpdateCustomerScreen'
 import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
@@ -13,6 +14,7 @@ import styles from './SearchCustomerScreen.module.css'
 const SearchCustomerScreen = () => {
   const name = useForm('name')
   
+  const [updateCustomerScreen, setUpdateCustomerScreen] = React.useState(false)
   const [tableRowSelectedObject, setTableRowSelectedObject] = React.useState(null)
   const { data, loading, error, doFetch } = useFetch()
   const [modalData, setModalData] = React.useState({
@@ -24,23 +26,33 @@ const SearchCustomerScreen = () => {
   const tableNavigationButtons = [
     {
       classname: 'btn btn-dark',
+      divButtonClassName: `${styles.prevTablePageButton}`,
       handleClick: switchToPreviousTablePage,
-      description: 'Página Anterior'
+      description: '🡰'
     },
     {
       classname: 'btn btn-dark',
+      divButtonClassName: `${styles.centerTableButtonNavigation}`,
       handleClick: checkAddress,
       description: 'Consultar Endereço'
     },
     {
       classname: 'btn btn-dark',
+      divButtonClassName: `${styles.centerTableButtonNavigation}`,
+      handleClick: showUpdateCustomerScreen,
+      description: 'Atualizar Dados'
+    },
+    {
+      classname: 'btn btn-dark',
+      divButtonClassName: `${styles.centerTableButtonNavigation}`,
       handleClick: checkPhones,
       description: 'Consultar Telefones'
     },
     {
       classname: 'btn btn-dark',
+      divButtonClassName: `${styles.nextTablePageButton}`,
       handleClick: switchToNextTablePage,
-      description: 'Próxima Página'
+      description: '🡲'
     }
   ]
 
@@ -151,52 +163,62 @@ const SearchCustomerScreen = () => {
       showModal('Página não encontrada!', 'Você já está na ultima página')
   }
 
-  return (
-    <section className='mt-5 mb-5' >
-      <div className='row' >
-        <div className='col-lg-2' ></div>
-        <div className='col-lg-5 col-9' >
-          <div className='form-inline' >
-            <Input
-              id='name'
-              label='Nome'
-              type='Text'
-              placeholder='Insira o nome do cliente'
-              value={name.value}
-              handleChange={name.handleChange}
-              onBlur={name.onBlur}
-              inputClass={styles.inputGrow}
+  function showUpdateCustomerScreen() {
+    if (tableRowSelectedObject)
+      setUpdateCustomerScreen(true)
+    else
+      showModal('Selecione um cliente!', 'Selecione um cliente para atualizar seus dados!')
+  }
+
+  if (!updateCustomerScreen)
+    return (
+      <section className='mt-5 mb-5' >
+        <div className='row' >
+          <div className='col-lg-2' ></div>
+          <div className='col-lg-5 col-9' >
+            <div className='form-inline' >
+              <Input
+                id='name'
+                label='Nome'
+                type='Text'
+                placeholder='Insira o nome do cliente'
+                value={name.value}
+                handleChange={name.handleChange}
+                onBlur={name.onBlur}
+                inputClass={styles.inputGrow}
+              />
+            </div>
+          </div>
+          <div className='col-lg-3 col-3' >
+            <Button
+              className='btn btn-outline-dark'
+              handleClick={searchForCustomers}
+              description='Buscar Cliente'
             />
           </div>
+          <div className='col-lg-2' ></div>
         </div>
-        <div className='col-lg-3 col-3' >
-          <Button
-            className='btn btn-outline-dark'
-            handleClick={searchForCustomers}
-            description='Buscar Cliente'
-          />
-        </div>
-        <div className='col-lg-2' ></div>
-      </div>
-      { data && !error &&
-        <>
-          <div className='row mt-5' >
-            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.pessoaResponseDTOList} setTableRowSelectedObject={setTableRowSelectedObject} />
-          </div>
-          <div className='row mt-5' >
-            {
-              tableNavigationButtons.map((buttonInfo, index) => (
-                <div key={index} className={`col-3 d-flex ${index < 2 ? 'justify-content-end' : 'justify-content-start'}`} >
-                  <Button className={buttonInfo.classname} handleClick={buttonInfo.handleClick} description={buttonInfo.description} />
-                </div>
-              ))
-            }
-          </div>
-        </>
-      }
-      <MyModal {...modalData} setModalData={setModalData} />
-    </section>
-  )
+        { data && !error &&
+          <>
+            <div className='row mt-5' >
+              <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.pessoaResponseDTOList} setTableRowSelectedObject={setTableRowSelectedObject} />
+            </div>
+            <div className='row mt-5' >
+              {
+                tableNavigationButtons.map((buttonInfo, index) => (
+                  <div key={index} className={`col ${buttonInfo.divButtonClassName}`} >
+                    <Button className={buttonInfo.classname} handleClick={buttonInfo.handleClick} description={buttonInfo.description} />
+                  </div>
+                ))
+              }
+            </div>
+          </>
+        }
+        <MyModal {...modalData} setModalData={setModalData} />
+      </section>
+    )
+  else
+    return <UpdateCustomerScreen tableRowSelectedObject={tableRowSelectedObject} setUpdateCustomerScreen={setUpdateCustomerScreen} />
 }
 
 export default SearchCustomerScreen

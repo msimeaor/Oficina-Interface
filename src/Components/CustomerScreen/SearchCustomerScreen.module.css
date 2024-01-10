@@ -2,3 +2,18 @@
   flex-grow: 1;
   margin-left: 2rem;
 }
+
+.prevTablePageButton {
+  display: flex;
+  justify-content: end;
+}
+
+.nextTablePageButton {
+  display: flex;
+  justify-content: start;
+}
+
+.centerTableButtonNavigation {
+  display: flex;
+  justify-content: center;
+}
