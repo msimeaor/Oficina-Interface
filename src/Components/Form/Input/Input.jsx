@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholder, inputClass }) => {
+const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholder, inputClass, hidden }) => {
   return (
     <>
       <label htmlFor={id}>
@@ -14,7 +14,8 @@ const Input = ({ id, label, type, value, handleChange, onBlur, error, placeholde
         value={value} 
         onChange= {handleChange} 
         onBlur={onBlur} 
-        placeholder={placeholder} 
+        placeholder={placeholder}
+        hidden={hidden}
       />
       { 
         error && 
