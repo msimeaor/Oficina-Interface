@@ -2,18 +2,68 @@ import React from 'react'
 import Input from '../Form/Input/Input'
 import Select from '../Form/Select/Select'
 import Button from '../Form/Button/Button'
+import MyModal from '../Modal/MyModal'
 import useForm from '../../Hooks/useForm'
+import useFetch from '../../Hooks/useFetch'
+import endpointsApi from '../../json/EndpointsApi.json'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const AddressRegistryScreen = () => {
   const street = useForm('street')
   const resident = useForm('resident')
   const [uf, setUf] = React.useState('')
+  const [residentsList, setResidentsList] = React.useState([])
+  const [currentResidentId, setCurrentResidentId] = React.useState(null)
+  const [modalData, setModalData] = React.useState({})
+
+  const {loading, error, doFetch} = useFetch()
 
   const selectOptions = ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO']
 
-  function searchResident() {
+  async function searchResident() {
+    if (!residentInputIsFilled()) {
+      showModal('Ops...', 'Insira o nome do cliente para buscá-lo')
+      return false
+    }
 
+    const resident = await fetchToSearchResident()
+    
+    if (resident !== false) {
+      fillResidentInput(resident.nome)
+      setCurrentResidentId(resident.id)
+    }
+  }
+
+  function residentInputIsFilled() {
+    return resident.value.length > 0
+  }
+
+  function showModal(title, message) {
+    setModalData({title, message})
+  }
+
+  async function fetchToSearchResident() {
+    const residentName = resident.value
+    const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.person.findPersonByName}`.replace(':name', residentName)
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const [response, json] = await doFetch(url, options)
+    
+    if (!response.ok) {
+      showModal('Ops...', json.mensagemErro)
+      return false
+    }
+
+    return json._embedded.pessoaResponseDTOList[0];
+  }
+
+  function fillResidentInput(residentName) {
+    resident.setValue(residentName)
   }
 
   function addResident() {
@@ -23,6 +73,10 @@ const AddressRegistryScreen = () => {
   function removeResident() {
     
   }
+
+  React.useEffect(() => {
+    console.log(currentResidentId);
+  }, [currentResidentId])
 
   return (
     <section className='mt-5 mb-5' >
@@ -74,6 +128,7 @@ const AddressRegistryScreen = () => {
           </div>
         </div>
       </form>
+      {modalData && <MyModal {...modalData} setModalData={setModalData} />}
     </section>
   )
 }
