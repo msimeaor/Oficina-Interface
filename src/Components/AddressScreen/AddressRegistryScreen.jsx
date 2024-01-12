@@ -67,16 +67,35 @@ const AddressRegistryScreen = () => {
   }
 
   function addResident() {
-    
+    if (!currentResidentIdExists()) {
+      showModal('Morador não selecionado!', 'Busque um morador pelo nome antes de adicioná-lo')
+      return false
+    }
+
+    addResidentToResidentsList()
+  }
+
+  function currentResidentIdExists() {
+    return currentResidentId != null
+  }
+
+  function addResidentToResidentsList() {
+    if (!residentsList.includes(currentResidentId)) {
+      setResidentsList([...residentsList, currentResidentId])
+      clearCurrentResidentId()
+    }
+    else
+      showModal('Morador já adicionado!', 'Este morador já está na lista de moradores!')
+  }
+
+  function clearCurrentResidentId() {
+    setCurrentResidentId(null)
+    resident.setValue('')
   }
 
   function removeResident() {
     
   }
-
-  React.useEffect(() => {
-    console.log(currentResidentId);
-  }, [currentResidentId])
 
   return (
     <section className='mt-5 mb-5' >
