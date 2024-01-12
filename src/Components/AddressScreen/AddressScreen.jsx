@@ -1,6 +1,7 @@
 import React from 'react'
 import CustomNavLink from '../NavLink/CustomNavLink'
 import AddressRegistryScreen from './AddressRegistryScreen'
+import SearchAddressScreen from './SearchAddressScreen'
 import { Route, Routes } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -15,9 +16,7 @@ const AddressScreen = ({ setCurrentPage }) => {
       <CustomNavLink registryHref='cadastrar' searchHref='buscar' />
       <Routes>
         <Route path='/cadastrar' element={<AddressRegistryScreen/>} />
-        {
-          //<Route path='/buscar' element={<SearchAddressScreen/>} />
-        }
+        <Route path='/buscar' element={<SearchAddressScreen/>} />
       </Routes>
     </section>
   )
