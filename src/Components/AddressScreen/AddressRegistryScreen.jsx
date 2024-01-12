@@ -94,7 +94,30 @@ const AddressRegistryScreen = () => {
   }
 
   function removeResident() {
-    
+    if (!currentResidentIdExists()) {
+      showModal('Morador não selecionado!', 'Busque um morador pelo nome antes de adicioná-lo')
+      return false
+    }
+
+    removeResidentOfResidentsList()
+  }
+
+  function removeResidentOfResidentsList() {
+    if (residentsList.includes(currentResidentId)) {
+      remove()
+      clearCurrentResidentId()
+    } else {
+      showModal('Morador não adicionado!', 'Este morador não está na lista de moradores')
+      clearCurrentResidentId()
+    }
+  }
+
+  function remove() {
+    setResidentsList((prevResidentsList) => {
+      return prevResidentsList.filter((residentId) => {
+        return residentId !== currentResidentId
+      })
+    })
   }
 
   return (
