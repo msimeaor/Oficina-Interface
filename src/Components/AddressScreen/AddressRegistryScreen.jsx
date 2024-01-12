@@ -120,6 +120,17 @@ const AddressRegistryScreen = () => {
     })
   }
 
+  function clearForm() {
+    street.setValue('')
+    resident.setValue('')
+    setUf('')
+    setCurrentResidentId(null)
+  }
+
+  async function saveAddress() {
+    
+  }
+
   return (
     <section className='mt-5 mb-5' >
       <form onSubmit={(event) => event.preventDefault()} >
@@ -167,6 +178,14 @@ const AddressRegistryScreen = () => {
           </div>
           <div className='col-auto' >
             <Button className='btn btn-outline-secondary' description='Remover' handleClick={removeResident} />
+          </div>
+        </div>
+        <div className='row mt-5' >
+          <div className='col-6 d-flex justify-content-end' >
+            <Button className='btn btn-dark' description='Limpar Formulário' handleClick={clearForm} />
+          </div>
+          <div className='col-6' >
+            <Button className='btn btn-dark' description='Salvar Endereço' handleClick={saveAddress} />
           </div>
         </div>
       </form>
