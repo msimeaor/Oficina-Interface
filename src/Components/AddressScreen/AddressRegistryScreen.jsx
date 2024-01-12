@@ -128,7 +128,46 @@ const AddressRegistryScreen = () => {
   }
 
   async function saveAddress() {
+    if (!isInputsValid()) {
+      showModal('Dados inválidos!', 'Preencha os campos "logradouro" e "UF" no formulário!')
+      return false
+    }
+
+    fetchToSaveAddress()
+  }
+
+  function isInputsValid() {
+    return street.validateInput() && uf.length > 0
+  }
+
+  async function fetchToSaveAddress() {
+    const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.address.saveAddress}`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        logradouro: street.value,
+        uf: uf,
+        pessoasId: residentsList
+      })
+    }
+
+    const [response, json] = await doFetch(url, options)
     
+    requestFeedback(response, json)
+  }
+
+  function requestFeedback(response, json) {
+    if (response.ok) {
+      showModal('Sucesso!', 'Endereço salvo com sucesso!')
+      clearForm()
+    }
+    else {
+      showModal('Erro!', json.mensagemErro)
+      clearForm()
+    }
   }
 
   return (
