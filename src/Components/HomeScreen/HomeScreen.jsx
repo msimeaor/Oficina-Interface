@@ -15,7 +15,7 @@ const HomeScreen = ({ setCurrentPage }) => {
     <section className='container mt-5' >
       <div className='row' >
         <LinkToServiceScreen href='clientes' LinkIcon={<Person/>} linkDescription='Clientes' />
-        <LinkToServiceScreen href='#' LinkIcon={<House/>} linkDescription='Endereços' />
+        <LinkToServiceScreen href='enderecos' LinkIcon={<House/>} linkDescription='Endereços' />
         <LinkToServiceScreen href='#' LinkIcon={<Phone/>} linkDescription='Telefones' />
       </div>
     </section>

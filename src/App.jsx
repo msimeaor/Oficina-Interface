@@ -5,6 +5,7 @@ import CustomerScreen from "./Components/CustomerScreen/CustomerScreen"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './globalStyles.css'
+import AddressScreen from "./Components/AddressScreen/AddressScreen"
 
 const App = () => {
   const [currentPage, setCurrentPage] = React.useState('Bem Vindo')
@@ -15,6 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomeScreen setCurrentPage={setCurrentPage} />} />
         <Route path="/clientes/*" element={<CustomerScreen setCurrentPage={setCurrentPage} />} />
+        <Route path="/enderecos/*" element={<AddressScreen setCurrentPage={setCurrentPage} />} />
       </Routes>
     </BrowserRouter>
   )
