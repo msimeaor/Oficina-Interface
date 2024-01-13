@@ -7,12 +7,36 @@ import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
 import styles from './SearchAddressScreen.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import MyTable from '../Table/MyTable'
 
 const SearchAddressScreen = () => {
   const street = useForm('street')
   const [modalData, setModalData] = React.useState({})
-
+  const [tableRowSelectedObject, setTableRowSelectedObject] = React.useState(null)
   const {data, loading, error, doFetch} = useFetch()
+
+  const tableTitles = ['#', 'Logradouro', 'UF']
+  const tableAttributesDisplayed = ['#', 'logradouro', 'uf']
+  const tableNavigationButtons = [
+    {
+      classname: 'btn btn-dark',
+      divButtonClassName: `${styles.prevTablePageButton}`,
+      handleClick: switchToPreviousTablePage,
+      description: '🡰'
+    },
+    {
+      classname: 'btn btn-dark',
+      divButtonClassName: `${styles.centerTableButtonNavigation}`,
+      handleClick: showUpdateAddressScreen,
+      description: 'Atualizar Dados'
+    },
+    {
+      classname: 'btn btn-dark',
+      divButtonClassName: `${styles.nextTablePageButton}`,
+      handleClick: switchToNextTablePage,
+      description: '🡲'
+    }
+  ]
 
   function searchForAddressess() {
     if (!isInputFilled()) {
@@ -50,6 +74,44 @@ const SearchAddressScreen = () => {
     // If the fetch returns the address list, the "data" attribute will be filled and the table will be rendered
   }
 
+  function switchToPreviousTablePage() {
+    const currentPage = data.page.number
+
+    if (currentPage > 0) {
+      const previousPageURL = data._links.prev.href
+      switchPage(previousPageURL)
+    } else {
+      showModal('Página não encontrada!', 'Você já está na primeira página!')
+    }
+  }
+
+  async function switchPage(url) {
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const [response, json] = await doFetch(url, options)
+  }
+
+  function showUpdateAddressScreen() {
+
+  }
+
+  function switchToNextTablePage() {
+    const currentPage = data.page.number
+    const totalPages = data.page.totalPages
+
+    if (currentPage < totalPages - 1) {
+      const nextPageURL = data._links.next.href
+      switchPage(nextPageURL)
+    } else {
+      showModal('Página não encontrada!', 'Você já está na ultima página!')
+    }
+  }
+
   return (
     <section className='mt-5 mb-5' >
       <div className='row' >
@@ -77,6 +139,23 @@ const SearchAddressScreen = () => {
         </div>
         <div className='col-lg-2' ></div>
       </div>
+      {
+        data && !error &&
+        <>
+          <div className='row mt-5' >
+            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.enderecoResponseDTOList} setTableRowSelectedObject={setTableRowSelectedObject} />
+          </div>
+          <div className='row mt-5' >
+            {
+              tableNavigationButtons.map((buttonInfo, index) => (
+                <div key={index} className={`col ${buttonInfo.divButtonClassName}`}  >
+                  <Button className={buttonInfo.classname} description={buttonInfo.description} handleClick={buttonInfo.handleClick} />
+                </div>
+              ))
+            }
+          </div>
+        </>
+      }
       {modalData && <MyModal {...modalData} setModalData={setModalData} />}
     </section>
   )

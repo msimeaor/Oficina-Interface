@@ -18,3 +18,9 @@
 .selectedRow {
   background-color: #E9ECEF;
 }
+
+tr, 
+th, 
+td {
+  text-align: center;
+}
