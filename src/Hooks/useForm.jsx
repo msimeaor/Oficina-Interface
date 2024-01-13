@@ -12,10 +12,14 @@ const values = {
   carPlate: {
     regex: /\w{7}/i,
     message: 'Placa inválida!'
+  },
+  phoneNumber: {
+    regex: /^\d{11}$/,
+    message: 'Número inválido!'
   }
 }
 
-const mandatoryFillInputs = ['name', 'carPlate', 'street']
+const mandatoryFillInputs = ['name', 'carPlate', 'street', 'phoneNumber', 'phoneOwner']
 
 const useForm = (type) => {
   const [value, setValue] = React.useState('')
