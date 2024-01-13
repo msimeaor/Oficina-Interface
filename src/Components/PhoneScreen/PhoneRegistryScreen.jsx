@@ -79,6 +79,56 @@ const PhoneRegistryScreen = () => {
     setCurrentOwnerId(null)
   }
 
+  function clearForm() {
+    number.setValue('')
+    owner.setValue('')
+    setCurrentOwnerId(null)
+  }
+
+  function savePhone() {
+    if (!isInputsValid()) {
+      showModal('Dados inválidos!', 'Insira um numero de telefone ou um proprietário!')
+      return false
+    }
+    
+    const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.phones.savePhone}`
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        numero: number.value,
+        pessoaId: ownerId
+      })
+    }
+
+    fetchAPI(url, options)
+  }
+
+  function isInputsValid() {
+    return number.validateInput() && ownerId !== null
+  }
+
+  async function fetchAPI(url, options) {
+    const [response, json] = await doFetch(url, options)
+    requestFeedback(response, json)
+  }
+
+  function requestFeedback(response, json) {
+    if (!response.ok) {
+      showModal('Erro!', json.mensagemErro)
+      clearForm()
+    } else {
+      showModal('Sucesso!', 'Telefone salvo com sucesso!')
+      clearForm()
+    }
+  }
+
+  function updatePhone() {
+
+  }
+
   return (
     <section className='mt-5 mb-5' >
       <form onSubmit={(event) => event.preventDefault()} >
@@ -107,13 +157,24 @@ const PhoneRegistryScreen = () => {
           </div>
         </div>
         <div className='row d-flex justify-content-end' >
-            <div className='col-auto' >
-              <Button className='btn btn-outline-secondary' description='Buscar' handleClick={searchOwner} />
-            </div>
-            <div className='col-auto' >
-              <Button className='btn btn-outline-secondary' description='Adicionar' handleClick={addOwner} />
-            </div>
+          <div className='col-auto' >
+            <Button className='btn btn-outline-secondary' description='Buscar' handleClick={searchOwner} />
           </div>
+          <div className='col-auto' >
+            <Button className='btn btn-outline-secondary' description='Adicionar' handleClick={addOwner} />
+          </div>
+        </div>
+        <div className='row mt-5 d-flex justify-content-center' >
+          <div className='col-auto' >
+            <Button className='btn btn-dark' description='Limpar Formulário' handleClick={clearForm} />
+          </div>
+          <div className='col-auto' >
+            <Button className='btn btn-dark' description='Salvar Telefone' handleClick={savePhone} />
+          </div>
+          <div className='col-auto' >
+            <Button className='btn btn-dark' description='Atualizar Telefone' handleClick={updatePhone} />
+          </div>
+        </div>
       </form>
       {modalData && <MyModal {...modalData} setModalData={setModalData} />}
     </section>
