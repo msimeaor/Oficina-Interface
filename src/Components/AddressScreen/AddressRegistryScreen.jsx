@@ -8,7 +8,7 @@ import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const AddressRegistryScreen = () => {
+const AddressRegistryScreen = ({ setUpdateAddressScreen, tableRowSelectedObject, setTableRowSelectedObject }) => {
   const street = useForm('street')
   const resident = useForm('resident')
   const [uf, setUf] = React.useState('')
@@ -133,14 +133,11 @@ const AddressRegistryScreen = () => {
       return false
     }
 
-    fetchToSaveAddress()
-  }
+    if (tableRowSelectedObject) {
+      showModal('Erro!', 'Você está fazendo uma operação de atualização de endereço. Para atualizar, clique em "Atualizar Endereço"!')
+      return false
+    }
 
-  function isInputsValid() {
-    return street.validateInput() && uf.length > 0
-  }
-
-  async function fetchToSaveAddress() {
     const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.address.saveAddress}`
     const options = {
       method: 'POST',
@@ -154,8 +151,15 @@ const AddressRegistryScreen = () => {
       })
     }
 
+    fetchAPI(url, options)
+  }
+
+  function isInputsValid() {
+    return street.validateInput() && uf.length > 0
+  }
+
+  async function fetchAPI(url, options) {
     const [response, json] = await doFetch(url, options)
-    
     requestFeedback(response, json)
   }
 
@@ -170,66 +174,114 @@ const AddressRegistryScreen = () => {
     }
   }
 
+  function returnToSearchAddressScreen() {
+    setTableRowSelectedObject(null)
+    setUpdateAddressScreen(false)
+  }
+
+  function updateAddress() {
+    if (!tableRowSelectedObject) {
+      showModal('Erro!', 'Você está fazendo uma operação de cadastro de endereço. Para salvar, clique em "Salvar Endereço"!')
+      return false
+    }
+
+    const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.address.updateAddress}`.replace(':id', tableRowSelectedObject.id)
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        logradouro: street.value,
+        uf: uf,
+        pessoasId: residentsList
+      })
+    }
+
+    fetchAPI(url, options)
+  }
+
+  React.useEffect(() => {
+    function fillInputsForUpdate() {
+      if (tableRowSelectedObject) {
+        street.setValue(tableRowSelectedObject.logradouro)
+        setUf(tableRowSelectedObject.uf)
+      }
+    }
+    
+    fillInputsForUpdate()
+  }, [])
+
   return (
-    <section className='mt-5 mb-5' >
-      <form onSubmit={(event) => event.preventDefault()} >
-        <div className='row' >
-          <div className='col-6' >
-            <div className='form-group' >
-              <Input
-                id='street'
-                label='Logradouro'
-                type='Text'
-                placeholder='Insira o logradouro'
-                {...street}
-              />
+    <>
+      {
+        tableRowSelectedObject && (
+          <Button className='btn btn-danger' description='Voltar' handleClick={returnToSearchAddressScreen} />
+        )
+      }
+      <section className='mt-5 mb-5' >
+        <form onSubmit={(event) => event.preventDefault()} >
+          <div className='row' >
+            <div className='col-6' >
+              <div className='form-group' >
+                <Input
+                  id='street'
+                  label='Logradouro'
+                  type='Text'
+                  placeholder='Insira o logradouro'
+                  {...street}
+                />
+              </div>
+            </div>
+            <div className='col-6' >
+              <div className='form-group' >
+                <Select
+                  id='uf'
+                  label='UF'
+                  options={selectOptions}
+                  value={uf}
+                  setValue={setUf}
+                />
+              </div>
             </div>
           </div>
-          <div className='col-6' >
-            <div className='form-group' >
-              <Select
-                id='uf'
-                label='UF'
-                options={selectOptions}
-                value={uf}
-                setValue={setUf}
-              />
+          <div className='row' >
+            <div className='col-12' >
+              <div className='form-group' >
+                <Input
+                  id='resident'
+                  label='Morador'
+                  type='Text'
+                  placeholder='Insira o nome do morador'
+                  {...resident}
+                />
+              </div>
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-outline-secondary' description='Buscar' handleClick={searchResident} />
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-outline-secondary' description='Adicionar' handleClick={addResident} />
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-outline-secondary' description='Remover' handleClick={removeResident} />
             </div>
           </div>
-        </div>
-        <div className='row' >
-          <div className='col-12' >
-            <div className='form-group' >
-              <Input
-                id='resident'
-                label='Morador'
-                type='Text'
-                placeholder='Insira o nome do morador'
-                {...resident}
-              />
+          <div className='row mt-5 d-flex justify-content-center' >
+            <div className='col-auto' >
+              <Button className='btn btn-dark' description='Limpar Formulário' handleClick={clearForm} />
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-dark' description='Salvar Endereço' handleClick={saveAddress} />
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-dark' description='Atualizar Endereço' handleClick={updateAddress} />
             </div>
           </div>
-          <div className='col-auto' >
-            <Button className='btn btn-outline-secondary' description='Buscar' handleClick={searchResident} />
-          </div>
-          <div className='col-auto' >
-            <Button className='btn btn-outline-secondary' description='Adicionar' handleClick={addResident} />
-          </div>
-          <div className='col-auto' >
-            <Button className='btn btn-outline-secondary' description='Remover' handleClick={removeResident} />
-          </div>
-        </div>
-        <div className='row mt-5' >
-          <div className='col-6 d-flex justify-content-end' >
-            <Button className='btn btn-dark' description='Limpar Formulário' handleClick={clearForm} />
-          </div>
-          <div className='col-6' >
-            <Button className='btn btn-dark' description='Salvar Endereço' handleClick={saveAddress} />
-          </div>
-        </div>
-      </form>
-      {modalData && <MyModal {...modalData} setModalData={setModalData} />}
-    </section>
+        </form>
+        {modalData && <MyModal {...modalData} setModalData={setModalData} />}
+      </section>
+    </>
   )
 }
 

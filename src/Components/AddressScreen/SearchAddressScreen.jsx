@@ -2,17 +2,19 @@ import React from 'react'
 import Input from '../Form/Input/Input'
 import Button from '../Form/Button/Button'
 import MyModal from '../Modal/MyModal'
+import MyTable from '../Table/MyTable'
+import AddressRegistryScreen from './AddressRegistryScreen'
 import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
 import styles from './SearchAddressScreen.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import MyTable from '../Table/MyTable'
 
 const SearchAddressScreen = () => {
   const street = useForm('street')
   const [modalData, setModalData] = React.useState({})
   const [tableRowSelectedObject, setTableRowSelectedObject] = React.useState(null)
+  const [updateAddressScreen, setUpdateAddressScreen] = React.useState(false)
   const {data, loading, error, doFetch} = useFetch()
 
   const tableTitles = ['#', 'Logradouro', 'UF']
@@ -27,7 +29,7 @@ const SearchAddressScreen = () => {
     {
       classname: 'btn btn-dark',
       divButtonClassName: `${styles.centerTableButtonNavigation}`,
-      handleClick: showUpdateAddressScreen,
+      handleClick: updateAddress,
       description: 'Atualizar Dados'
     },
     {
@@ -93,11 +95,21 @@ const SearchAddressScreen = () => {
       }
     }
 
-    const [response, json] = await doFetch(url, options)
+    await doFetch(url, options)
+    setTableRowSelectedObject(null)
   }
 
-  function showUpdateAddressScreen() {
+  function updateAddress() {
+    if (!someTableRowIsSelected()) {
+      showModal('Endereço não selecionado!', 'Selecione um endereço para atualizar seus dados!')
+      return false
+    }
 
+    setUpdateAddressScreen(true)
+  }
+
+  function someTableRowIsSelected() {
+    return tableRowSelectedObject !== null
   }
 
   function switchToNextTablePage() {
@@ -112,53 +124,56 @@ const SearchAddressScreen = () => {
     }
   }
 
-  return (
-    <section className='mt-5 mb-5' >
-      <div className='row' >
-        <div className='col-lg-2' ></div>
-        <div className='col-lg-5 col-9' >
-          <div className='form-inline' >
-            <Input
-              id='street'
-              label='Logradouro'
-              type='Text'
-              placeholder='Insira o logradouro'
-              value={street.value}
-              handleChange={street.handleChange}
-              onBlur={street.onBlur}
-              inputClass={styles.inputGrow}
+  if (!updateAddressScreen)
+    return (
+      <section className='mt-5 mb-5' >
+        <div className='row' >
+          <div className='col-lg-2' ></div>
+          <div className='col-lg-5 col-9' >
+            <div className='form-inline' >
+              <Input
+                id='street'
+                label='Logradouro'
+                type='Text'
+                placeholder='Insira o logradouro'
+                value={street.value}
+                handleChange={street.handleChange}
+                onBlur={street.onBlur}
+                inputClass={styles.inputGrow}
+              />
+            </div>
+          </div>
+          <div className='col-lg-3 col-3' >
+            <Button
+              className='btn btn-outline-dark'
+              handleClick={searchForAddressess}
+              description='Buscar Logradouro'
             />
           </div>
+          <div className='col-lg-2' ></div>
         </div>
-        <div className='col-lg-3 col-3' >
-          <Button
-            className='btn btn-outline-dark'
-            handleClick={searchForAddressess}
-            description='Buscar Logradouro'
-          />
-        </div>
-        <div className='col-lg-2' ></div>
-      </div>
-      {
-        data && !error &&
-        <>
-          <div className='row mt-5' >
-            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.enderecoResponseDTOList} setTableRowSelectedObject={setTableRowSelectedObject} />
-          </div>
-          <div className='row mt-5' >
-            {
-              tableNavigationButtons.map((buttonInfo, index) => (
-                <div key={index} className={`col ${buttonInfo.divButtonClassName}`}  >
-                  <Button className={buttonInfo.classname} description={buttonInfo.description} handleClick={buttonInfo.handleClick} />
-                </div>
-              ))
-            }
-          </div>
-        </>
-      }
-      {modalData && <MyModal {...modalData} setModalData={setModalData} />}
-    </section>
-  )
+        {
+          data && !error &&
+          <>
+            <div className='row mt-5' >
+              <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={data._embedded.enderecoResponseDTOList} setTableRowSelectedObject={setTableRowSelectedObject} />
+            </div>
+            <div className='row mt-5' >
+              {
+                tableNavigationButtons.map((buttonInfo, index) => (
+                  <div key={index} className={`col ${buttonInfo.divButtonClassName}`}  >
+                    <Button className={buttonInfo.classname} description={buttonInfo.description} handleClick={buttonInfo.handleClick} />
+                  </div>
+                ))
+              }
+            </div>
+          </>
+        }
+        {modalData && <MyModal {...modalData} setModalData={setModalData} />}
+      </section>
+    )
+  else
+    return <AddressRegistryScreen setUpdateAddressScreen={setUpdateAddressScreen} tableRowSelectedObject={tableRowSelectedObject} setTableRowSelectedObject={setTableRowSelectedObject} />
 }
 
 export default SearchAddressScreen
