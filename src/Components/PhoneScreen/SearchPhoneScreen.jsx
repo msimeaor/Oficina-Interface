@@ -4,6 +4,7 @@ import Button from '../Form/Button/Button'
 import MyModal from '../Modal/MyModal'
 import MyTable from '../Table/MyTable'
 import PhoneOwnerTable from '../Table/PhoneOwnerTable'
+import PhoneRegistryScreen from './PhoneRegistryScreen'
 import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
@@ -15,6 +16,7 @@ const SearchPhoneScreen = () => {
   const phoneNumber = useForm('phoneNumber')
   const {data, loading, error, doFetch} = useFetch()
   const [modalData, setModalData] = React.useState({})
+  const [updatePhoneScreen, setUpdatePhoneScreen] = React.useState(false)
 
   const [tableRowSelectedObject, setTableRowSelectedObject] = React.useState(null)
   const tableTitles = ['Numero']
@@ -74,7 +76,12 @@ const SearchPhoneScreen = () => {
   }
 
   function updatePhone() {
+    if (tableRowSelectedObject == null) {
+      showModal('Erro!', 'Selecione o numero de telefone para atualizar seus dados!')
+      return false
+    }
 
+    setUpdatePhoneScreen(true)
   }
 
   async function showPhoneOwnerData() {
@@ -100,53 +107,56 @@ const SearchPhoneScreen = () => {
     return json
   }
 
-  return (
-    <section className='mt-5 mb-5' >
-      <div className='row' >
-        <div className='col-lg-2' ></div>
-        <div className='col-lg-5 col-9' >
-          <div className='form-inline' >
-            <Input
-              id='phoneNumber'
-              label='Número'
-              type='Text'
-              placeholder='Insira o número do telefone'
-              value={phoneNumber.value}
-              handleChange={phoneNumber.handleChange}
-              onBlur={phoneNumber.onBlur}
-              inputClass={styles.inputGrow}
+  if (!updatePhoneScreen)
+    return (
+      <section className='mt-5 mb-5' >
+        <div className='row' >
+          <div className='col-lg-2' ></div>
+          <div className='col-lg-5 col-9' >
+            <div className='form-inline' >
+              <Input
+                id='phoneNumber'
+                label='Número'
+                type='Text'
+                placeholder='Insira o número do telefone'
+                value={phoneNumber.value}
+                handleChange={phoneNumber.handleChange}
+                onBlur={phoneNumber.onBlur}
+                inputClass={styles.inputGrow}
+              />
+            </div>
+          </div>
+          <div className='col-lg-3 col-3' >
+            <Button
+              className='btn btn-outline-dark'
+              handleClick={searchForPhones}
+              description='Buscar Telefone'
             />
           </div>
+          <div className='col-lg-2' ></div>
         </div>
-        <div className='col-lg-3 col-3' >
-          <Button
-            className='btn btn-outline-dark'
-            handleClick={searchForPhones}
-            description='Buscar Telefone'
-          />
-        </div>
-        <div className='col-lg-2' ></div>
-      </div>
-      {
-        data && !error &&
-        <>
-          <div className='row mt-5' >
-            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={[data]} setTableRowSelectedObject={setTableRowSelectedObject} />
-          </div>
-          <div className='row mt-5' >
-            {
-              tableNavigationButtons.map((buttonInfo, index) => (
-                <div key={index} className={`col ${buttonInfo.divButtonClassName}`}  >
-                  <Button className={buttonInfo.classname} description={buttonInfo.description} handleClick={buttonInfo.handleClick} />
-                </div>
-              ))
-            }
-          </div>
-        </>
-      }
-      {modalData && <MyModal {...modalData} setModalData={setModalData} />}
-    </section>
-  )
+        {
+          data && !error &&
+          <>
+            <div className='row mt-5' >
+              <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={[data]} setTableRowSelectedObject={setTableRowSelectedObject} />
+            </div>
+            <div className='row mt-5' >
+              {
+                tableNavigationButtons.map((buttonInfo, index) => (
+                  <div key={index} className={`col ${buttonInfo.divButtonClassName}`}  >
+                    <Button className={buttonInfo.classname} description={buttonInfo.description} handleClick={buttonInfo.handleClick} />
+                  </div>
+                ))
+              }
+            </div>
+          </>
+        }
+        {modalData && <MyModal {...modalData} setModalData={setModalData} />}
+      </section>
+    )
+  else
+    return <PhoneRegistryScreen setUpdatePhoneScreen={setUpdatePhoneScreen} tableRowSelectedObject={tableRowSelectedObject} setTableRowSelectedObject={setTableRowSelectedObject} />
 }
 
 export default SearchPhoneScreen

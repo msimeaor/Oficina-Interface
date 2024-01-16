@@ -7,7 +7,7 @@ import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const PhoneRegistryScreen = () => {
+const PhoneRegistryScreen = ({setUpdatePhoneScreen, tableRowSelectedObject, setTableRowSelectedObject }) => {
   const number = useForm('phoneNumber')
   const owner = useForm('phoneOwner')
   const [currentOwnerId, setCurrentOwnerId] = React.useState(null)
@@ -90,6 +90,11 @@ const PhoneRegistryScreen = () => {
       showModal('Dados inválidos!', 'Insira um numero de telefone ou um proprietário!')
       return false
     }
+
+    if (tableRowSelectedObject !== null) {
+      showModal('Erro!', 'Você está fazendo uma operação de atualização! Clique em "Atualizar Telefone" para atualizar seus dados!')
+      return false
+    }
     
     const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.phones.savePhone}`
     const options = {
@@ -126,58 +131,96 @@ const PhoneRegistryScreen = () => {
   }
 
   function updatePhone() {
+    if (tableRowSelectedObject == null) {
+      showModal('Erro!', 'Você está fazendo uma operação de cadastro! Clique em "Salvar Telefone" para salvar este telefone!')
+      return false
+    }
 
+    const url = `${endpointsApi.defaultAddress}${endpointsApi.endpoints.phones.updatePhone}`.replace(':id', tableRowSelectedObject.id)
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        numero: number.value,
+        pessoaId: ownerId
+      })
+    }
+
+    fetchAPI(url, options)
   }
 
+  function returnToSearchPhoneScreen() {
+    setTableRowSelectedObject(null)
+    setUpdatePhoneScreen(false)
+  }
+
+  React.useEffect(() => {
+    if (tableRowSelectedObject) {
+      number.setValue(tableRowSelectedObject.numero)
+      const ownerSearchLinkHref = tableRowSelectedObject._links.Proprietário.href.split('/')
+      const ownerSearchedId = (Number) (ownerSearchLinkHref[ownerSearchLinkHref.length - 1])
+      setOwnerId(ownerSearchedId)
+    }
+  }, [])
+
   return (
-    <section className='mt-5 mb-5' >
-      <form onSubmit={(event) => event.preventDefault()} >
-        <div className='row' >
-          <div className='col-6' >
-            <div className='form-group' >
-              <Input
-                id='phoneNumber'
-                label='Numero'
-                type='Text'
-                placeholder='Insira o numero do telefone'
-                {...number}
-              />
+    <>
+      {
+        tableRowSelectedObject && (
+          <Button className='btn btn-danger' description='Voltar' handleClick={returnToSearchPhoneScreen} />
+        )
+      }
+      <section className='mt-5 mb-5' >
+        <form onSubmit={(event) => event.preventDefault()} >
+          <div className='row' >
+            <div className='col-6' >
+              <div className='form-group' >
+                <Input
+                  id='phoneNumber'
+                  label='Numero'
+                  type='Text'
+                  placeholder='Insira o numero do telefone'
+                  {...number}
+                />
+              </div>
+            </div>
+            <div className='col-6' >
+              <div className='form-group' >
+                <Input
+                  id='owner'
+                  label='Proprietário'
+                  type='Text'
+                  placeholder='Insira o nome do proprietário do telefone'
+                  {...owner}
+                />
+              </div>
             </div>
           </div>
-          <div className='col-6' >
-            <div className='form-group' >
-              <Input
-                id='owner'
-                label='Proprietário'
-                type='Text'
-                placeholder='Insira o nome do proprietário do telefone'
-                {...owner}
-              />
+          <div className='row d-flex justify-content-end' >
+            <div className='col-auto' >
+              <Button className='btn btn-outline-secondary' description='Buscar' handleClick={searchOwner} />
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-outline-secondary' description='Adicionar' handleClick={addOwner} />
             </div>
           </div>
-        </div>
-        <div className='row d-flex justify-content-end' >
-          <div className='col-auto' >
-            <Button className='btn btn-outline-secondary' description='Buscar' handleClick={searchOwner} />
+          <div className='row mt-5 d-flex justify-content-center' >
+            <div className='col-auto' >
+              <Button className='btn btn-dark' description='Limpar Formulário' handleClick={clearForm} />
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-dark' description='Salvar Telefone' handleClick={savePhone} />
+            </div>
+            <div className='col-auto' >
+              <Button className='btn btn-dark' description='Atualizar Telefone' handleClick={updatePhone} />
+            </div>
           </div>
-          <div className='col-auto' >
-            <Button className='btn btn-outline-secondary' description='Adicionar' handleClick={addOwner} />
-          </div>
-        </div>
-        <div className='row mt-5 d-flex justify-content-center' >
-          <div className='col-auto' >
-            <Button className='btn btn-dark' description='Limpar Formulário' handleClick={clearForm} />
-          </div>
-          <div className='col-auto' >
-            <Button className='btn btn-dark' description='Salvar Telefone' handleClick={savePhone} />
-          </div>
-          <div className='col-auto' >
-            <Button className='btn btn-dark' description='Atualizar Telefone' handleClick={updatePhone} />
-          </div>
-        </div>
-      </form>
-      {modalData && <MyModal {...modalData} setModalData={setModalData} />}
-    </section>
+        </form>
+        {modalData && <MyModal {...modalData} setModalData={setModalData} />}
+      </section>
+    </>
   )
 }
 
