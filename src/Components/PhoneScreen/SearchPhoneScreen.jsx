@@ -7,11 +7,31 @@ import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
 import styles from './SearchPhoneScreen.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import MyTable from '../Table/MyTable'
 
 const SearchPhoneScreen = () => {
   const phoneNumber = useForm('phoneNumber')
   const {data, loading, error, doFetch} = useFetch()
   const [modalData, setModalData] = React.useState({})
+
+  const [tableRowSelectedObject, setTableRowSelectedObject] = React.useState(null)
+  const tableTitles = ['Numero']
+  const tableAttributesDisplayed = ['numero']
+
+  const tableNavigationButtons = [
+    {
+      classname: 'btn btn-dark',
+      divButtonClassName: `${styles.prevTablePageButton}`,
+      handleClick: updatePhone,
+      description: 'Atualizar Dados'
+    },
+    {
+      classname: 'btn btn-dark',
+      divButtonClassName: `${styles.nextTablePageButton}`,
+      handleClick: showPhoneOwnerData,
+      description: 'Consultar Proprietário'
+    },
+  ]
 
   function searchForPhones() {
     if (!isInputFilled()) {
@@ -47,6 +67,14 @@ const SearchPhoneScreen = () => {
     // If the response.ok becomes true, the data will be filled and the table will be rendered
   }
 
+  function updatePhone() {
+
+  }
+
+  function showPhoneOwnerData() {
+
+  }
+
   return (
     <section className='mt-5 mb-5' >
       <div className='row' >
@@ -74,6 +102,23 @@ const SearchPhoneScreen = () => {
         </div>
         <div className='col-lg-2' ></div>
       </div>
+      {
+        data && !error &&
+        <>
+          <div className='row mt-5' >
+            <MyTable tableTitles={tableTitles} tableAttributesDisplayed={tableAttributesDisplayed} tableDataList={[data]} setTableRowSelectedObject={setTableRowSelectedObject} />
+          </div>
+          <div className='row mt-5' >
+            {
+              tableNavigationButtons.map((buttonInfo, index) => (
+                <div key={index} className={`col ${buttonInfo.divButtonClassName}`}  >
+                  <Button className={buttonInfo.classname} description={buttonInfo.description} handleClick={buttonInfo.handleClick} />
+                </div>
+              ))
+            }
+          </div>
+        </>
+      }
       {modalData && <MyModal {...modalData} setModalData={setModalData} />}
     </section>
   )
