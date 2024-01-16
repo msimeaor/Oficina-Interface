@@ -2,12 +2,14 @@ import React from 'react'
 import Input from '../Form/Input/Input'
 import Button from '../Form/Button/Button'
 import MyModal from '../Modal/MyModal'
+import MyTable from '../Table/MyTable'
+import PhoneOwnerTable from '../Table/PhoneOwnerTable'
 import useForm from '../../Hooks/useForm'
 import useFetch from '../../Hooks/useFetch'
 import endpointsApi from '../../json/EndpointsApi.json'
 import styles from './SearchPhoneScreen.module.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import MyTable from '../Table/MyTable'
+
 
 const SearchPhoneScreen = () => {
   const phoneNumber = useForm('phoneNumber')
@@ -17,6 +19,9 @@ const SearchPhoneScreen = () => {
   const [tableRowSelectedObject, setTableRowSelectedObject] = React.useState(null)
   const tableTitles = ['Numero']
   const tableAttributesDisplayed = ['numero']
+
+  const ownerObjectAttributes = ['nome', 'sexo', 'cpf', 'dataNascimento', 'email']
+  const ownerAttributesDisplayed = ['Nome', 'Sexo', 'CPF', 'Data de Nascimento', 'Email']
 
   const tableNavigationButtons = [
     {
@@ -40,6 +45,7 @@ const SearchPhoneScreen = () => {
     }
 
     fetchForSearchPhone()
+    setTableRowSelectedObject(null)
   }
 
   function isInputFilled() {
@@ -71,8 +77,27 @@ const SearchPhoneScreen = () => {
 
   }
 
-  function showPhoneOwnerData() {
+  async function showPhoneOwnerData() {
+    if (tableRowSelectedObject !== null) {
+      const ownerData = await fetchToSearchPhoneOwner()
+      showModal('Proprietário', <PhoneOwnerTable ownerData={ownerData} ownerObjectAttributes={ownerObjectAttributes} ownerAttributesDisplayed={ownerAttributesDisplayed} />)
+    } else {
+      showModal('Erro!', 'Selecione o numero de telefone para consultar seu proprietário!')
+    }
+  }
 
+  async function fetchToSearchPhoneOwner() {
+    const ownerSearchLink = tableRowSelectedObject._links.Proprietário.href
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const json = await (await fetch(ownerSearchLink, options)).json()
+    
+    return json
   }
 
   return (
