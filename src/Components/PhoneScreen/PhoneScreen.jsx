@@ -1,8 +1,9 @@
 import React from 'react'
 import CustomNavLink from '../NavLink/CustomNavLink'
+import PhoneRegistryScreen from './PhoneRegistryScreen'
+import SearchPhoneScreen from './SearchPhoneScreen'
 import { Route, Routes } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import PhoneRegistryScreen from './PhoneRegistryScreen'
 
 
 const PhoneScreen = ({ setCurrentPage }) => {
@@ -15,6 +16,7 @@ const PhoneScreen = ({ setCurrentPage }) => {
       <CustomNavLink registryHref='cadastrar' searchHref='buscar' />
       <Routes>
         <Route path='/cadastrar' element={<PhoneRegistryScreen/>} />
+        <Route path='/buscar' element={<SearchPhoneScreen/>} />
       </Routes>
     </section>
   )
